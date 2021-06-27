@@ -6,6 +6,9 @@ You can use this simple project as the starting point for your Ethereum projects
 
 This repository using [Hardhat Boilerplate](https://github.com/nomiclabs/hardhat-hackathon-boilerplate) and replace its frontend with Nextjs, Redux Saga, Chakra UI.
 
+## Demo
+https://simple-token.vercel.app/
+
 ## Quick start
 
 The first thing you need to do is installing Metamask plugin for your browser.
