@@ -23,7 +23,7 @@ const ConnectedWallet = (props: Web3State) => {
       alignItems="center"
     >
       <HStack spacing="10px">
-        <Box>{props.rightNetwork ? 'Hardhat' : 'Wrong Network'}</Box>
+        <Box>{props.rightNetwork ? 'Ropsten' : 'Wrong Network'}</Box>
         <Box>{shortEthAddress(props.selectedAddress)}</Box>
         <Box>{`${token.balance ? token.balance.toString() : 0} ${props.tokens[0].symbol}`}</Box>
       </HStack>

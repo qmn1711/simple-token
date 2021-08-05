@@ -28,7 +28,7 @@ import rootReducer, {
 import TokenArtifact from 'contracts/Token.json'
 import contractAddress from 'contracts/contract-address.json'
 
-const HARDHAT_NETWORK_ID = '31337'
+const NETWORK_ID = 3
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001
 
 // Workaround type AppState
@@ -108,10 +108,52 @@ function* updateBalance(token, address) {
   return balance
 }
 
+function* watchAccountBalance(tokenContract: any, address: string) {
+  const name = yield tokenContract.name()
+  const symbol = yield tokenContract.symbol()
+
+  while (true) {
+    const balance = yield call(updateBalance, tokenContract, address)
+    yield put(updateWeb3State({ tokens: [{ token: tokenContract, name, symbol, balance }] }))
+    yield delay(3000)
+  }
+}
+
+function* switchNetwork() {
+  try {
+    yield window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: NETWORK_ID.toString(16) }],
+    })
+  } catch (error) {
+    if (error.code === 4902) {
+      try {
+        yield window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: NETWORK_ID.toString(16),
+              chainName: 'Ropsten Test Network',
+              rpcUrl: process.env.ROPSTEN_RPC_URL,
+              blockExplorerUrls: 'https://ropsten.etherscan.io/',
+            },
+          ],
+        })
+      } catch (addError) {
+        console.log('addError', addError)
+        throw addError
+      }
+    }
+
+    console.log('error', error)
+    throw error
+  }
+}
+
 function* setupAddress(address: string) {
   try {
     const chainId = yield window.ethereum.request({ method: 'eth_chainId' })
-    const rightNetwork = parseInt(chainId, 16).toString() === HARDHAT_NETWORK_ID
+    const rightNetwork = parseInt(chainId, 16) === NETWORK_ID
     yield put(updateWeb3State({ selectedAddress: address, rightNetwork }))
 
     if (rightNetwork) {
@@ -121,11 +163,9 @@ function* setupAddress(address: string) {
       const symbol = yield token.symbol()
       yield put(updateWeb3State({ provider, tokens: [{ token, name, symbol }] }))
 
-      while (true) {
-        const balance = yield call(updateBalance, token, address)
-        yield put(updateWeb3State({ tokens: [{ token, name, symbol, balance }] }))
-        yield delay(3000)
-      }
+      yield call(watchAccountBalance, token, address)
+    } else {
+      yield call(switchNetwork)
     }
   } catch (error) {
     console.log('setupAddress - error', error)

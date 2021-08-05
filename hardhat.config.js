@@ -1,11 +1,11 @@
-import { task } from "hardhat/config";
-import "@nomiclabs/hardhat-waffle";
+require("@nomiclabs/hardhat-waffle");
+require('dotenv').config()
+const { task } = require('hardhat/config');
 
 // The next line is part of the sample project, you don't need it in your
 // project. It imports a Hardhat task definition, that can be used for
 // testing the frontend.
-import "./tasks/faucet";
-
+require('./tasks/faucet');
 
 task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners();
@@ -16,5 +16,11 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 });
 
 module.exports = {
-  solidity: "0.7.3"
+  solidity: "0.7.3",
+  networks: {
+    ropsten: {
+      url: process.env.ROPSTEN_RPC_URL,
+      accounts: [`0x${process.env.ROPSTEN_PRIVATE_KEY}`],
+    }
+  }
 };

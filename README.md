@@ -9,6 +9,8 @@ This repository using [Hardhat Boilerplate](https://github.com/nomiclabs/hardhat
 ## Demo
 https://simple-token.vercel.app/
 
+Import this private key, then try to send some MHT tokens on Ropsten: `b9075ff2e114c4bcc879164fbac493420da1c9a7c688a6baa05b1677fc4d43b4`
+
 ## Quick start
 
 The first thing you need to do is installing Metamask plugin for your browser.
