@@ -123,7 +123,7 @@ function* switchNetwork() {
   try {
     yield window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: NETWORK_ID.toString(16) }],
+      params: [{ chainId: `0x${NETWORK_ID.toString(16)}` }],
     })
   } catch (error) {
     if (error.code === 4902) {
@@ -132,7 +132,7 @@ function* switchNetwork() {
           method: 'wallet_addEthereumChain',
           params: [
             {
-              chainId: NETWORK_ID.toString(16),
+              chainId: `0x${NETWORK_ID.toString(16)}`,
               chainName: 'Ropsten Test Network',
               rpcUrl: process.env.ROPSTEN_RPC_URL,
               blockExplorerUrls: 'https://ropsten.etherscan.io/',

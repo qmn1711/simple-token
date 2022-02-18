@@ -15,12 +15,9 @@ function Transfer() {
   const dispatch = useAppDispatch()
 
   const submitHandler = (values) => {
-    // do something
     console.log('submitHandler', values)
     dispatch(transferTo(values))
   }
-
-  console.log('txErrorMsg', txErrorMsg)
 
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
@@ -44,7 +41,7 @@ function Transfer() {
           />
           <FormErrorMessage>{errors.amount && errors.amount.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={errors.toAddress} mt={4}>
+        <FormControl isInvalid={errors.toAddress} mt={5}>
           <FormLabel htmlFor="toAddress">Recipient address</FormLabel>
           <Input
             id="toAddress"
@@ -59,7 +56,7 @@ function Transfer() {
           />
           <FormErrorMessage>{errors.toAddress && errors.toAddress.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={errors.toAddress} mt={4}>
+        <FormControl isInvalid={errors.toAddress} mt={5}>
           {txTransfering ? (
             <Spinner />
           ) : (
